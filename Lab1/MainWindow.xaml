@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab1" xmlns:views="clr-namespace:Lab1.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="360" Width="640" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="200" Width="320" WindowStartupLocation="CenterScreen">
     <Grid>
         <views:MainView/>
     </Grid>

@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Lab1.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
         private DateTime? _birthday;
+        private int? _age;
         private string? _message;
 
         public DateTime? Birthday
@@ -19,12 +22,34 @@ namespace Lab1.ViewModels
             {
                 if (_birthday != value)
                 {
-                    _birthday = value;
-                    constructMessage();
-                    OnPropertyChanged(nameof(Birthday));
+                    _age = DateTime.Today.Year - value?.Year;
+                    if (DateTime.Today.Month - value?.Month < 0) --_age;
+                    else if (DateTime.Today.Month - value?.Month == 0
+                        && DateTime.Today.Day - value?.Day < 0) --_age;
+
+                    if (_age < 0 || _age > 135) resetBirthday();
+                    else
+                    {
+                        if (DateTime.Now.Month == value?.Month && DateTime.Now.Day == value?.Day)
+                        {
+                            MessageBox.Show("Happy birthday!", "Hooray", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        _birthday = value;
+                        constructMessage();
+                    }
                 }
             }
         }
+
+        private void resetBirthday()
+        {
+            _age = null;
+            _message = null;
+            _birthday = null;
+            MessageBox.Show("You are not alive! Pick another birth date plese.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            OnPropertyChanged(nameof(Message));
+        }
+
         public string? Message
         {
             get => _message;
@@ -53,7 +78,7 @@ namespace Lab1.ViewModels
             };
             string[] chineseSigns = {"Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat"};
             string chineseZodiac = chineseSigns[year % 12];
-            _message = $"You are a {DateTime.Now.Year - year} year old {zodiac}-{chineseZodiac}! So cool!";
+            _message = $"You are a {_age} year old {zodiac}-{chineseZodiac}! So cool!";
             OnPropertyChanged(nameof(Message));
         }
 
